@@ -1,0 +1,155 @@
+
+<% layout('layouts/boilerplate') %>
+ <!-- <h4>All Listings</h4> -->
+  <style>
+    #filters{
+      display: flex;
+      flex-wrap: wrap;
+       align-items:center;
+    }
+    .filter{
+      text-align: center;
+      margin-right:2rem;
+      margin-top: 2rem !important ;
+      opacity:0.7;
+      align-items: center;
+    }
+    .filter:hover{
+      opacity: 1;
+      cursor:pointer;
+      transform: scale(1.1);
+    }
+    .filter p{
+      font-size:0.8rem;
+    }
+    
+    .icon{
+      text-decoration: none;
+      color:black !important;
+      
+    }
+     /* a{
+      color:black !important;
+    }
+   */
+   .filter.active {
+     opacity: 1;
+      transform: scale(1.25);
+    }
+    .tax-info{
+      display: none;
+    }
+    .tax-toggle{
+      border:1px solid black;
+      border-radius: 1.2rem;
+      height: 3rem;
+      padding: 1rem;
+      /* margin-left:2rem; */
+      display:flex;
+      align-items: center;
+      margin-top:1.75rem;
+      margin-bottom:2rem;
+     
+    }
+      </style>
+ <div id="filters">
+   <a href='/listings/category/Trending' class="filter icon" data-path="trending" >
+      <div><i class="fa-solid fa-fire"></i></div>
+      <p>Trending</p>
+   </a>
+<a href='/listings/category/Rooms' class="filter icon " method="POST"  data-path="rooms" >
+    <div><i class="fa-solid fa-bed"></i></div>
+    <p>Rooms</p>
+</a>
+   <a href='/listings/category/Cities' class="filter icon " method="POST"  data-path="cities" >
+      <div><i class="fa-solid fa-city"></i></div>
+      <p>Iconic cities</p>
+   </a>
+   <a href='/listings/category/Mountains' class="filter icon " method="POST"  data-path="mountains" >
+      <div><i class="fa-solid fa-mountain-sun"></i></div>
+      <p>Mountains</p>
+   </a>
+   <a href='/listings/category/Castles' class="filter icon " method="POST"  data-path="castles" >
+      <div><i class="fa-brands fa-fort-awesome"></i></div>
+      <p>Castles</p>
+   </a>
+   <a href='/listings/category/Pools' class="filter icon" method="POST"  data-path="pools" >
+      <div><i class="fa-solid fa-person-swimming"></i></div>
+      <p>Amazing pools</p>
+   </a>
+   <a href='/listings/category/Camps' class="filter icon"   data-path="camps" >
+      <div><i class="fa-solid fa-campground"></i></div>
+      <p>Camping</p>
+   </a>
+   <a href='/listings/category/Farms' class="filter icon" method="POST"  data-path="farms">
+      <div><i class="fa-solid fa-tractor"></i></div>
+      <p> Farms</p>
+   </a>
+   <a href='/listings/category/Beach' class="filter icon " method="POST"  data-path="beach" >
+      <div><i class="fa-solid fa-umbrella-beach"></i></div>
+      <p>Beach</p>
+   </a>
+   <a href='/listings/category/Surfing' class="filter icon" method="POST"  data-path="surfing" >
+      <div><i class="fa-solid fa-person-snowboarding"></i></div>
+      <p> Surfing</p>
+   </a>
+
+    <div class="tax-toggle">
+      <div class="form-check-reverse form-switch">
+      <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
+      <label class="form-check-label" for="switchCheckDefault">Display total after taxes</label>
+      </div>
+    </div>
+      <script>
+      const currentPath = window.location.pathname.toLowerCase();  // "/listings/category/rooms"
+      const pathParts = currentPath.split("/");
+      const currentCategory = pathParts[pathParts.length - 1];     // "rooms"
+
+      document.querySelectorAll('.filter').forEach(filter => {
+        if (filter.dataset.path === currentCategory) {
+          filter.classList.add('active');
+        }
+      });
+    </script>
+
+  </div>
+  <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
+    <% for(let listing of allListings) { %>
+      <a href="/listings/<%=listing._id%>" class="listing-link">
+        <div class="card col listing-card">
+          <img 
+            src="<%= listing.image.url%>" 
+            class="card-img-top" 
+            alt="listing_image" 
+            style="height: 20rem"
+          />
+          <div class="card-img-overlay"></div>
+         
+          <div class="card-body">
+            <p class="card-text">
+              <b><%= listing.title %></b><br>
+              &#8377;<%= listing.price.toLocaleString("en-IN") %>/night
+              <i class="tax-info small"> &nbsp; &nbsp; +18% GST</i>
+            </p>
+          </div>
+       </div>
+    </a>
+    <% } %>
+  </div>
+
+  <script>
+    let taxSwitch=document.getElementById("switchCheckDefault")
+    taxSwitch.addEventListener("click",()=>{
+      let taxInfo=document.getElementsByClassName("tax-info");
+      for(info of taxInfo){
+        if(info.style.display!="inline"){
+          info.style.display="inline";
+        }else{
+          info.style.display="none";
+        }
+      }
+    })
+  </script>
+
+
+  
