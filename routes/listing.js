@@ -15,7 +15,7 @@ router.route("/")
     .get(wrapAsync(listingController.index)) //index route
     .post(isLoggedIn, 
         validateListing,
-        upload.single("listing[image]"),// Use multer to handle file uploads
+        upload.single("listing[image]"),//   multer is use to handle file uploads
         wrapAsync(listingController.createListing)); //create route
     
     

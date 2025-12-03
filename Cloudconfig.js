@@ -1,3 +1,9 @@
+// You never store raw images inside MongoDB.
+
+// You upload the image to Cloudinary (via multer-storage-cloudinary).
+
+// Then store only the URL and filename in MongoDB Atlas.
+
 const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 cloudinary.config({

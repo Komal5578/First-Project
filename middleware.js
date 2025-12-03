@@ -17,20 +17,29 @@ module.exports.isLoggedIn = (req, res, next) => {
 
 module.exports.saveRedirectUrl = (req, res, next) => {
     if (req.session.redirectUrl) {
-        res.locals.redirectUrl = req.session.redirectUrl; // Store the original URL
+        res.locals.redirectUrl = req.session.redirectUrl; // to redirect to the page user was trying to view before login
     }
     next();
 }
 
 module.exports.isOwner = async (req, res, next) => {
     const { id } = req.params;
-    let listing = await Listing.findById(id);
-    if (!listing.owner._id.equals(res.locals.currentUser._id) ) {
+    const listing = await Listing.findById(id);
+
+    // FIX 1: Check if listing exists
+    if (!listing) {
+        req.flash("error", "Listing does not exist!");
+        return res.redirect("/listings");
+    }
+
+    // FIX 2: Check owner safely
+    if (!listing.owner.equals(res.locals.currentUser._id)) {
         req.flash("error", "You do not have permission to do that!");
         return res.redirect(`/listings/${id}`);
     }
+
     next();
-}
+};
 
 module.exports. validateListing=(req,res,next)=>{
     let {error}=listingSchema.validate(req.body);
